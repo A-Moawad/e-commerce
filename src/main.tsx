@@ -4,9 +4,6 @@ import App from './App.tsx'
 import './index.css'
 import { ChakraProvider } from '@chakra-ui/react'
 import {
-  useQuery,
-  useMutation,
-  useQueryClient,
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
