@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import {Link as ReactRouterLink} from "react-router-dom";
+import {Link as ChakraLink} from "@chakra-ui/react";
 import {
   Image,
   Box,
@@ -15,25 +17,21 @@ import { useQuery } from "@tanstack/react-query";
 import { Link as RouterLink, useSearchParams } from "react-router-dom";
 
 type Product = {
-  id: number;
-  title: string;
-  price: number;
+  category: string;
   description: string;
-  category: {
-    id: number;
-    name: string;
-    image: string;
+  id: number;
+  image: string;
+  price: number;
+  rating: {
+    count: number;
+    rate: number;
   };
-  images: string[];
+  title: string;
 };
 
 const fetchProducts = (): Promise<Product[]> => {
-  return fetch('https://api.escuelajs.co/api/v1/products')
-    .then((res) => res.json())
-    .then((products) => products.map((product: any) => ({
-      ...product,
-      images: Array.isArray(product.images) ? product.images : [product.images]
-    })));
+  return fetch('https://fakestoreapi.com/products')
+    .then((res) => res.json());
 };
 
 const Products = () => {
@@ -43,6 +41,8 @@ const Products = () => {
     queryKey: ['repoData'],
     queryFn: fetchProducts,
   });
+
+  console.log(data);
 
   const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
@@ -74,30 +74,38 @@ const Products = () => {
             borderRadius="md"
             overflow="hidden"
             textAlign="center"
-            _hover={{ cursor: "pointer" }}
+            _hover={{ textDecoration: 'none', cursor: "pointer" }}
+            _focus={{ outline: 'none' }}
           >
-            <Center>
-              <Image
-              src={product.images[0]}
-              alt={product.title}
-              width="200px"
-              height="200px"
-              borderRadius="md"
-              mb={4}
-            />
-            </Center>
-            <Heading fontSize="lg" fontWeight="bold" mb={2}>
-              <LinkOverlay as={RouterLink} to={`/products/${product.id}`}>
-                {product.title}
-              </LinkOverlay>
-            </Heading>
-            <Text fontSize="sm" noOfLines={3}>
-              {product.description}
-            </Text>
-            <Text fontSize="sm" mt={2}>
-              Category: {product.category.name}
-            </Text>
-            <Text fontSize="sm">Price: ${product.price}</Text>
+            <ChakraLink 
+              as={ReactRouterLink} 
+              to={`/products/${product.id}`}
+              _hover={{ textDecoration: 'none', color: 'inherit', cursor: "pointer" }}
+              _focus={{ outline: 'none' }}
+            >
+              <Center>
+                <Image
+                  src={product.image}
+                  alt={product.title}
+                  width="200px"
+                  height="200px"
+                  borderRadius="md"
+                  mb={4}
+                />
+              </Center>
+              <Heading fontSize="lg" fontWeight="bold" mb={2}>
+                <LinkOverlay as={RouterLink} to={`/products/${product.id}`}>
+                  {product.title}
+                </LinkOverlay>
+              </Heading>
+              <Text fontSize="sm" noOfLines={3}>
+                {product.description}
+              </Text>
+              <Text fontSize="sm" mt={2}>
+                Category: {product.category}
+              </Text>
+              <Text fontSize="sm">Price: ${product.price}</Text>
+            </ChakraLink>
           </LinkBox>
         ))}
       </Flex>
