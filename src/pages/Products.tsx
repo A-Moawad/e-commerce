@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import {Link as ReactRouterLink} from "react-router-dom";
+import { useState, useEffect } from "react";
+
+import {Link as RouterLink, useSearchParams} from "react-router-dom";
 import {Link as ChakraLink} from "@chakra-ui/react";
 import {
   Image,
@@ -14,7 +15,6 @@ import {
   Center
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
-import { Link as RouterLink, useSearchParams } from "react-router-dom";
 
 type Product = {
   category: string;
@@ -29,20 +29,43 @@ type Product = {
   title: string;
 };
 
-const fetchProducts = (): Promise<Product[]> => {
-  return fetch('https://fakestoreapi.com/products')
+const fetchProducts = (sortType: string, categories: string): Promise<Product[]> => {
+  let url = "https://fakestoreapi.com/products";
+  if (sortType) {
+    url += `?sort=${sortType}`;
+  }
+
+  else if (categories) {
+    url += "categories";
+  }
+
+  // if (limit) {
+  //   url += '?limit=' + limit;
+  // }
+  return fetch(url)
     .then((res) => res.json());
 };
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [sortBy, setSortBy] = useState(searchParams.get("sort_type") || "");
+  const [category, setCategory] = useState(searchParams.get("categories") || "");
+  
   const { isLoading, error, data } = useQuery<Product[]>({
-    queryKey: ['repoData'],
-    queryFn: fetchProducts,
+    queryKey: ['repoData', sortBy, category], // Include category in queryKey
+    queryFn: () => fetchProducts(sortBy, category[0]), // Pass category[0]
   });
 
-  console.log(data);
+  useEffect(() => {
+    console.log(data);
+    setSearchParams({
+      ...searchParams,
+      ...(sortBy ? { sort_type: sortBy } : {}),
+      ...(category ? { categories: category } : {}),
+    });
+  }, [sortBy, category, setSearchParams]);
+
+
 
   const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
@@ -53,7 +76,8 @@ const Products = () => {
   if (isLoading) return <Progress size='xs' isIndeterminate />;
   if (error instanceof Error) return <Text>Error: {error.message}</Text>;
   if (!data || data.length === 0) return <Text>No products found.</Text>;
-
+  if(category)
+    return <div>catgories found</div>
   return (
     <>
       <Select mt={1} onChange={handleSortChange} value={sortBy}>
@@ -78,7 +102,7 @@ const Products = () => {
             _focus={{ outline: 'none' }}
           >
             <ChakraLink 
-              as={ReactRouterLink} 
+              as={RouterLink} 
               to={`/products/${product.id}`}
               _hover={{ textDecoration: 'none', color: 'inherit', cursor: "pointer" }}
               _focus={{ outline: 'none' }}
