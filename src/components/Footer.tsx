@@ -6,7 +6,7 @@ import { FaSquareTwitter } from "react-icons/fa6";
 
 const Footer = () => {
   return (
-    <Box bg="gray.100" p="20px">
+    <Box bg="gray.100" p="20px" width="100vw">
       <Wrap spacing="20px" justify="space-between">
         {footerData.map((section, index) => (
           <Box key={index}>

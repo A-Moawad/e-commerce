@@ -1,7 +1,6 @@
 import { Center, Box, Image, Heading, Text } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import React from 'react';
 import { useState, useEffect } from 'react';
 
 type Product = {
@@ -27,11 +26,11 @@ const fetchProduct = async (userId: string): Promise<Product> => {
 };
 
 const Product = () => {
-  const { userId } = useParams<{ userId: any }>();
-  const [product, setProduct] = React.useState<Product | null>(null);
-  const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
+  const { userId } = useParams<{ userId: string }>();
+  const [product, setProduct] = useState<Product | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const fetchedProduct = await fetchProduct(userId);
