@@ -1,7 +1,7 @@
 import './App.css'
-import Home from './pages/Home';
+import Home from './pages/Home/Home';
 import Products from './pages/Products/Products';
-import Product from './pages/Product';
+import Product from './pages/Product/Product';
 import Login from './pages/Login';
 import Signup from './pages/SignUp';
 import SharedLayout from './pages/SharedLayout';
