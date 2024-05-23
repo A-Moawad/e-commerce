@@ -12,7 +12,7 @@ const Footer = () => {
   };
 
   return (
-    <Box bg="gray.100" p="20px" width="100vw">
+    <Box bg="gray.100" p="20px" width="100%">
       <Wrap spacing="20px" justify="space-between">
         {footerData.map((section, index) => (
           <Box key={index}>

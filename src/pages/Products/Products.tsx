@@ -29,10 +29,6 @@ const fetchProducts = (sortType: string): Promise<Product[]> => {
   if (sortType) {
     url += `?sort=${sortType}`;
   }
-
-  // if (limit) {
-  //   url += '?limit=' + limit;
-  // }
   return fetch(url)
     .then((res) => res.json());
 };

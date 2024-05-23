@@ -9,13 +9,19 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  MenuDivider
+  MenuDivider,
+  Tooltip
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import './header.css';
+import { IoCartOutline } from "react-icons/io5";
+import { Navigate } from "react-router-dom";
+
+
 
 const Header = () => {
+  const navigate = useNavigate();
   return (
     <Flex
       as="header"
@@ -25,10 +31,10 @@ const Header = () => {
       borderBottom="1px solid"
       borderColor="gray.200"
     >
-      <Box>
-        <Heading as="h3" size="lg">
-          E-Commerce
-        </Heading>
+      <Box onClick={() => navigate(`/`)} cursor="pointer">
+          <Heading as="h3" size="lg">
+            E-Commerce
+          </Heading>
       </Box>
       <Spacer />
       <Box>
@@ -60,6 +66,11 @@ const Header = () => {
           <Button as={Link} to="/login" variant="ghost">
             Login
           </Button>
+          <Tooltip label="carts" placement='bottom-start'>
+            <Button as={Link} to="/carts" variant="ghost">
+              <IoCartOutline fontSize="24px"/>
+            </Button>
+          </Tooltip>
           
         </Flex>
       </Box>
